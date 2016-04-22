@@ -1,0 +1,23 @@
+//============================================================================
+// Name        : CPP_Practice.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+#include"Queue.h"
+using namespace std;
+
+typedef struct Node {
+	struct Node *left, *right;
+	int info;
+}NODE ;
+
+int main() {
+	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+	string s ="";
+	Queue q;
+	return 0;
+}

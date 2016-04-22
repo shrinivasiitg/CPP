@@ -1,0 +1,135 @@
+//============================================================================
+// Name        : CPP_Practice.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+#include"Queue.h"
+using namespace std;
+
+
+typedef struct node{
+	int value;
+	struct node *left, *right;
+}node;
+
+typedef struct queue{
+	node *array[50];
+	int front, rear;
+	int capacity;
+	}queue;
+
+void enqueue(queue *q, node *root) {
+		if(root!=NULL)
+			printf("enqueued %d \n",root->value);
+		if(q->front==-1) {
+
+			q->front=q->rear=0;
+		//	q->array[q->rear] = (node *)malloc(sizeof(node));
+			q->array[q->rear]=root;
+		} else {
+			q->rear = q->rear + 1;
+		//	q->array[q->rear] = (node *)malloc(sizeof(node));
+			q->array[q->rear]=root;
+		}
+}
+
+node* deq(queue *q) {
+	if(q->front==-1) {
+		printf("can't be dequeued");
+		return NULL;
+	}
+	node *root= q->array[q->rear];
+	if(root!=NULL)
+		printf("root dequeud not null");
+	q->rear = (q->rear)-1;
+	if(q->rear == -1) {
+		q->front = -1;
+	}
+	return root;
+}
+
+void lot(node *root, queue *q) {
+
+	enqueue(q, root);
+	printf("q->front %d \n",q->front);
+	enqueue(q, NULL);
+		printf("q->rear %d \n",q->rear);
+	node* prev = NULL;
+	int i;
+	for(i=0;i<4;i++){
+		node *pop = deq(q);
+
+		if(pop == NULL) {
+			printf("pop is null\n");
+			enqueue(q, NULL);
+		} else {
+			printf("popped value111 %d \n",pop->value);
+			if(prev==NULL) {
+				printf("popped value %d \n",pop->value);
+				printf("q->rear %d ",q->rear);
+				break;
+			}
+			if(pop->left!=NULL) {
+				enqueue(q, root->left);
+			}
+			if(pop->right!=NULL) {
+				enqueue(q, root->right);
+			}
+		}
+		prev = pop;
+	}
+
+}
+
+void print(node *root) {
+	if(root==NULL) return;
+	printf("%d ",root->value);
+	print(root->left);
+	print(root->right);
+	return;
+}
+
+int main(){
+	node *root = (node *)malloc(sizeof(node));
+	root->value = 1;
+	root->left = (node *)malloc(sizeof(node));
+	root->right = (node *)malloc(sizeof(node));
+	root->left->value = 2;
+	root->right->value = 5;
+
+	//root->right
+	//root->right->right
+	root->right->right=(node *)malloc(sizeof(node));
+	root->right->right->value = 7;
+	root->right->right->left = NULL;
+	root->right->right->right = NULL;
+	//root->right->left
+	root->right->left = NULL;
+
+	//root->left
+	//root->left->left
+	root->left->left = (node *)malloc(sizeof(node));
+	root->left->left->value = 3;
+	root->left->left->left = NULL;
+	root->left->left->right = NULL;
+	//root->left->right
+	root->left->right = (node *)malloc(sizeof(node));
+	root->left->right->value = 4;
+	root->left->right->left = NULL;
+	root->left->right->right = (node *)malloc(sizeof(node));
+	root->left->right->right->value = 6;
+	root->left->right->right->left = NULL;
+	root->left->right->right->right = NULL;
+
+	print(root);
+	queue *q = (queue *)malloc(sizeof(queue));
+	q->front = -1;
+	q->rear=-1;
+	q->capacity = 50;
+	lot(root, q);
+	return 1;
+}

@@ -1,0 +1,177 @@
+/*
+ *
+ *  Created on: Apr 14, 2016
+ *      Author: Shrinivas
+ *
+ *
+  */
+
+#include<iostream>
+#include<string>
+#include<fstream>
+
+using namespace std;
+
+//int** board;
+int x[8] = { -2, -2, -1, 1, 2, 2, 1, -1 };
+int y[8] = { -1, 1, 2, 2, 1, -1, -2, -2 };
+
+void errorCode(int errorCode) {
+
+	switch(errorCode){
+	case 1:
+		cout << "Error : Invalid number of arguments" << endl;
+		cout << "Please enter only one argument and that should be input file name" << endl;
+		break;
+	case 2:
+		cout << "Error : Invalid input file" << endl;
+		cout << "Please enter correct input file" << endl;
+		break;
+	case 3:
+		cout << "Error : Empty input file" << endl;
+		cout << "Please provide a file having correct input" << endl;
+		break;
+	default:
+		exit(1);
+	}
+	exit(1);
+}
+
+void checkCommandLineArguments(int argc) {
+	if(argc != 2) {
+		cout << argc << endl;
+		errorCode(1);
+	}
+	return;
+}
+
+void validateInputFile(char* fileName){
+
+	ifstream fin(fileName);
+	if (!fin.good()) {
+		errorCode(2);
+	}
+	if (fin.peek() == std::ifstream::traits_type::eof()) {
+		errorCode(3);
+	}
+	return;
+}
+
+bool gotpath(int** &board, int row, int col, int path, int endnum) {
+	if (board[row][col] != 0)
+		return false;
+
+	cout << path << endl;
+	board[row][col] = path;
+
+	if (path == endnum)
+		return true;
+
+	if (path > endnum)
+		return false;
+
+	for (int i = 0; i < 8; i++) {
+		if (gotpath(board, row + x[i], col + y[i], path + 1, endnum))
+			return true;
+	}
+
+	board[row][col] = 0;
+
+	return false;
+
+}
+
+
+void printInFile(int** &board, int n, ofstream &writeFile) {
+
+	for (int i = 2; i < n + 2; i++) {
+		for (int j = 2; j < n + 2; j++) {
+			writeFile << board[i][j] << "\t" ;
+		}
+		writeFile << endl;
+	}
+	writeFile << endl;
+}
+
+void allocateMemoryToBoard(int** &board, int n) {
+	board = new int*[n];
+	for(int i=0; i<n; i++) {
+		board[i] = new int[n];
+	}
+}
+
+void freeBoardMemory(int** &board, int n) {
+	for(int i=0; i<n; i++) {
+		free(board[i]);
+	}
+	free(board);
+}
+
+void initializeBoard(int** &board, int n) {
+	for (int i = 0; i < n + 4; i++) {
+		for (int j = 0; j < n + 4; j++) {
+			board[i][j] = -1;
+		}
+	}
+	for (int i = 2; i < n + 2; i++){
+		for (int j = 2; j < n + 2; j++) {
+			board[i][j] = 0;
+		}
+	}
+
+}
+
+void printBoard(int** &board, int n) {
+	for (int i = 2; i < n + 2; i++){
+		for (int j = 2; j < n + 2; j++) {
+			cout << board[i][j] << "\t";
+		}
+		cout << endl;
+	}
+
+}
+int main(int argc, char*argv[]) {
+
+	checkCommandLineArguments(argc);
+
+	validateInputFile(argv[1]);
+
+	int n, st_x, st_y;
+	string inputFileName(argv[1]);
+	string outputFileName = "";
+	for (int i = 0; i < strlen(argv[1]); i++) {
+		if (argv[1][i] == '.')
+			break;
+		outputFileName.push_back(argv[1][i]);
+	}
+	outputFileName = outputFileName + "out.txt";
+
+	ifstream readFile;
+	readFile.open(argv[1]);
+
+	ofstream writeFile;
+	writeFile.open(outputFileName);
+
+	int puzzleNumber = 1;
+	readFile >> n >> st_x >> st_y ;
+	do {
+		writeFile << "Case: " << puzzleNumber << " - " << n << "x" << n << endl;
+		writeFile << "Start row: " << st_x <<" Start column: " << st_y << endl;
+
+		int** board;
+		allocateMemoryToBoard(board, n+4);
+		initializeBoard(board, n);
+		if (gotpath(board, st_x + 2, st_y + 2, 1, n * n))
+			printInFile(board, n,writeFile);
+		else
+			writeFile << "No Solutions for this case" << endl << endl;
+
+		freeBoardMemory(n);
+		puzzleNumber++;
+		readFile >> n >> st_x >> st_y ;
+	} while(!readFile.eof());
+
+	readFile.close();
+	writeFile.close();
+	return 0;
+}

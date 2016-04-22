@@ -1,0 +1,68 @@
+//============================================================================
+// Name        : CPP_Practice.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+#include"Queue.h"
+using namespace std;
+
+typedef struct node{
+    int value;
+    struct node *left, *right;
+}node;
+
+typedef struct queue{
+    node *array[50];
+    int front, rear;
+    }queue;
+
+void enqueue(queue *q, node *root) {
+        if(q->front==-1) {
+
+            q->front=q->rear=0;
+            q->array[q->rear] = (node *)malloc(sizeof(node));
+            q->array[q->rear]=root;
+        } else {
+            q->rear = q->rear + 1;
+            q->array[q->rear] = (node *)malloc(sizeof(node));
+            q->array[q->rear]=root;
+        }
+}
+
+node* dequeue(queue *q) {
+    if(q->front==-1) {
+        return NULL;
+    }
+    node *root= q->array[q->rear];
+    q->rear = (q->rear)-1;
+    if(q->rear == -1) {
+        q->front = -1;
+    }
+    return root;
+}
+
+int main() {
+	cout << "give -1 for exit, 0 for dequeue, any other number will be enqueued"
+	queue *q = (queue *)malloc(sizeof(queue));
+	q->front = -1;
+	q->rear=-1;
+	int input =0;
+	cin >> input;
+	while(input != -1) {
+		if(input ==0 ){
+			deque(q);
+		} else {
+			node *root = (node*)malloc(sizeof(node));
+			root->value = input;
+			root->left = NULL;
+			root->right = NULL;
+			enqueue(q,root);
+		}
+		cin >> input;
+	}
+	return 0;
+}

@@ -1,0 +1,20 @@
+18:42:54 **** Incremental Build of configuration Debug for project CPP_Practice ****
+make all 
+Building file: ../src/CPP_Practice.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/CPP_Practice.d" -MT"src/CPP_Practice.o" -o "src/CPP_Practice.o" "../src/CPP_Practice.cpp"
+Finished building: ../src/CPP_Practice.cpp
+ 
+Building file: ../src/CheggChess.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/CheggChess.d" -MT"src/CheggChess.o" -o "src/CheggChess.o" "../src/CheggChess.cpp"
+Finished building: ../src/CheggChess.cpp
+ 
+Building target: CPP_Practice
+Invoking: MacOS X C++ Linker
+g++  -o "CPP_Practice"  ./src/CPP_Practice.o ./src/CheggChess.o ./src/Queue.o ./src/queue_struct.o   
+Finished building target: CPP_Practice
+ 
+
+18:43:34 Build Finished (took 39s.914ms)
+
